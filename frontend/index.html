@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Sense - AI-Powered Diabetes Prediction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🩺 Diabetes Sense</h1>
+            <p>AI-Powered Diabetes Risk Assessment Tool</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('home')">Home</button>
+            <button class="tab" onclick="switchTab('predict')">Diabetes Prediction</button>
+        </div>
+
+        <div id="home" class="tab-content active">
+            <div class="home-content">
+                <h2>Welcome to Diabetes Sense</h2>
+                <p style="font-size: 1.1em; margin: 20px 0; line-height: 1.6;">
+                    Our advanced AI system uses multiple machine learning models to assess diabetes risk 
+                    based on key health indicators. Get instant predictions with detailed explanations.
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>🤖 Multiple AI Models</h3>
+                        <p>Logistic Regression, Random Forest, and Gradient Boosting models work together for accurate predictions.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📊 LIME Explanations</h3>
+                        <p>Understand exactly which factors influenced each prediction with visual explanations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>⚡ Instant Results</h3>
+                        <p>Get immediate risk assessments with confidence scores and detailed insights.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎯 Clinically Relevant</h3>
+                        <p>Based on proven medical indicators used by healthcare professionals worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="predict" class="tab-content">
+            <h2>Diabetes Risk Prediction</h2>
+            
+            <div class="feature-info">
+                <h3>Required Health Indicators:</h3>
+                <ul>
+                    <li><strong>Pregnancies:</strong> Number of pregnancies (0 for men)</li>
+                    <li><strong>Glucose:</strong> Blood glucose level (mg/dL)</li>
+                    <li><strong>Blood Pressure:</strong> Diastolic blood pressure (mm Hg)</li>
+                    <li><strong>Skin Thickness:</strong> Triceps skinfold thickness (mm)</li>
+                    <li><strong>Insulin:</strong> Insulin level (mu U/ml)</li>
+                    <li><strong>BMI:</strong> Body Mass Index (kg/m²) - Normal range: 18.5-24.9</li>
+                    <li><strong>Diabetes Pedigree Function:</strong> Genetic risk factor based on family history</li>
+                    <li><strong>Age:</strong> Age in years</li>
+                </ul>
+            </div>
+
+            <form id="predictionForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="pregnancies">Pregnancies:</label>
+                        <input type="number" id="pregnancies" name="Pregnancies" min="0" max="20" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="glucose">Glucose (mg/dL):</label>
+                        <input type="number" id="glucose" name="Glucose" min="0" max="300" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodPressure">Blood Pressure (mm Hg):</label>
+                        <input type="number" id="bloodPressure" name="BloodPressure" min="0" max="200" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="skinThickness">Skin Thickness (mm):</label>
+                        <input type="number" id="skinThickness" name="SkinThickness" min="0" max="100" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="insulin">Insulin (mu U/ml):</label>
+                        <input type="number" id="insulin" name="Insulin" min="0" max="1000" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bmi">BMI (kg/m²):</label>
+                        <input type="number" id="bmi" name="BMI" min="10" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="diabetesPedigree">Diabetes Pedigree Function:</label>
+                        <input type="number" id="diabetesPedigree" name="DiabetesPedigreeFunction" min="0" step="0.001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age (years):</label>
+                        <input type="number" id="age" name="Age" min="1" max="120" step="1" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="predict-btn" id="predictBtn">
+                    🔮 Predict Diabetes Risk
+                </button>
+            </form>
+
+            <div class="loading" id="loading">
+                <p>🤖 AI models are analyzing your data...</p>
+            </div>
+
+            <div class="results" id="results"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
