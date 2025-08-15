@@ -48,6 +48,16 @@ X_train = data[FEATURES]
 # Initialize the LIME explainer with the training data
 explainer = LimeTabularExplainer(X_train.values, mode="classification", feature_names=FEATURES)
 
+@app.route('/', methods=['GET'])
+def home():
+    """Health check endpoint for Vercel deployment"""
+    return jsonify({
+        "message": "Diabetes Sense API is running!",
+        "status": "healthy",
+        "models_loaded": list(models.keys()),
+        "version": "1.0.0"
+    })
+
 @app.route('/predict', methods=['POST'])
 def predict():
     """
@@ -212,6 +222,11 @@ def tune_models():
         # Handle errors gracefully and return an error message
         print(f"Error in tune_models function: {e}")
         return jsonify({"error": f"Model tuning failed: {str(e)}"}), 500
+
+# Vercel serverless function handler
+def handler(request):
+    """Handler for Vercel serverless deployment"""
+    return app(request.environ, lambda status, headers: None)
 
 if __name__ == '__main__':
     # Run the Flask app in debug mode for easier development
