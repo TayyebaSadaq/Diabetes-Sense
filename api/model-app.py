@@ -81,6 +81,16 @@ def predict():
     It also generates LIME explanations for the predictions.
     """
     try:
+        # Check if required components are loaded
+        if scaler is None:
+            return jsonify({"error": "Scaler not loaded. Please check model files."}), 500
+        
+        if explainer is None:
+            return jsonify({"error": "LIME explainer not loaded. Please check training data."}), 500
+        
+        if not models:
+            return jsonify({"error": "No models loaded. Please check model files."}), 500
+
         # Parse the JSON input from the request
         data = request.get_json()
         input_data = [data.get(feature, 0) for feature in FEATURES]  # Default to 0 if a feature is missing
@@ -192,6 +202,13 @@ def tune_models():
     This function performs hyperparameter tuning for the models using GridSearchCV.
     """
     try:
+        # Check if required components are loaded
+        if X_train is None or data is None:
+            return jsonify({"error": "Training data not loaded. Please check data files."}), 500
+        
+        if not models:
+            return jsonify({"error": "No models loaded. Please check model files."}), 500
+
         # Define hyperparameter grids for each model
         param_grids = {
             "logistic_regression": {
