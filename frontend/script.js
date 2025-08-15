@@ -1,4 +1,4 @@
-const API_URL = 'https://diabetes-sense.vercel.app'; // Replace with your actual Vercel URL
+const API_URL = 'https://diabetes-sense-zogs.vercel.app';
 
 function switchTab(tabName) {
     // Remove active class from all tabs and contents
