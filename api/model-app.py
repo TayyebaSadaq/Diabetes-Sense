@@ -19,7 +19,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Define the folder where the models are stored
-model_folder = os.getenv('MODEL_FOLDER', os.path.join(os.path.dirname(__file__), '..', 'models'))
+model_folder = os.getenv('MODEL_FOLDER', os.path.join(os.path.dirname(__file__), '..', 'backend', 'models'))
 
 # Load the machine learning models and their accuracies
 models = {}
@@ -42,7 +42,7 @@ scaler = joblib.load(os.path.join(model_folder, 'scaler.pkl'))
 FEATURES = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
 
 # Load the training data for initializing the LIME explainer
-data = pd.read_csv(os.path.join(os.path.dirname(__file__), '..', 'data', 'balanced_pima.csv'))
+data = pd.read_csv(os.path.join(os.path.dirname(__file__), '..', 'backend', 'data', 'balanced_pima.csv'))
 X_train = data[FEATURES]
 
 # Initialize the LIME explainer with the training data
