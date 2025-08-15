@@ -21,32 +21,47 @@ CORS(app)
 # Define the folder where the models are stored
 model_folder = os.getenv('MODEL_FOLDER', os.path.join(os.path.dirname(__file__), '..', 'backend', 'models'))
 
-# Load the machine learning models and their accuracies
+# Load the machine learning models and their accuracies with better error handling
 models = {}
 accuracies = {}
 model_names = ["logistic_regression.pkl", "random_forest.pkl", "gradient_boosting.pkl"]
 
-for name in model_names:
-    model_path = os.path.join(model_folder, name)
-    if not os.path.exists(model_path):
-        raise FileNotFoundError(f"Model file not found: {model_path}")
-    # Load the model and its accuracy from the file
-    model, accuracy = joblib.load(model_path)
-    models[name.split('.')[0]] = model  # Use the model name without the file extension as the key
-    accuracies[name.split('.')[0]] = accuracy
+try:
+    for name in model_names:
+        model_path = os.path.join(model_folder, name)
+        if not os.path.exists(model_path):
+            print(f"Warning: Model file not found: {model_path}")
+            continue
+        # Load the model and its accuracy from the file
+        model, accuracy = joblib.load(model_path)
+        models[name.split('.')[0]] = model  # Use the model name without the file extension as the key
+        accuracies[name.split('.')[0]] = accuracy
+        print(f"Successfully loaded model: {name}")
+except Exception as e:
+    print(f"Error loading models: {e}")
 
-# Load the scaler for preprocessing input data
-scaler = joblib.load(os.path.join(model_folder, 'scaler.pkl'))
+# Load the scaler for preprocessing input data with error handling
+try:
+    scaler = joblib.load(os.path.join(model_folder, 'scaler.pkl'))
+    print("Successfully loaded scaler")
+except Exception as e:
+    print(f"Error loading scaler: {e}")
+    scaler = None
 
 # Define the list of features expected in the input data
 FEATURES = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
 
-# Load the training data for initializing the LIME explainer
-data = pd.read_csv(os.path.join(os.path.dirname(__file__), '..', 'backend', 'data', 'balanced_pima.csv'))
-X_train = data[FEATURES]
-
-# Initialize the LIME explainer with the training data
-explainer = LimeTabularExplainer(X_train.values, mode="classification", feature_names=FEATURES)
+# Load the training data for initializing the LIME explainer with error handling
+try:
+    data = pd.read_csv(os.path.join(os.path.dirname(__file__), '..', 'backend', 'data', 'balanced_pima.csv'))
+    X_train = data[FEATURES]
+    # Initialize the LIME explainer with the training data
+    explainer = LimeTabularExplainer(X_train.values, mode="classification", feature_names=FEATURES)
+    print("Successfully loaded training data and initialized LIME explainer")
+except Exception as e:
+    print(f"Error loading training data: {e}")
+    X_train = None
+    explainer = None
 
 @app.route('/', methods=['GET'])
 def home():
@@ -229,5 +244,7 @@ def handler(request):
     return app(request.environ, lambda status, headers: None)
 
 if __name__ == '__main__':
-    # Run the Flask app in debug mode for easier development
-    app.run(debug=True)
+    # Check if running on Render (production) or locally
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', port=port, debug=debug)
